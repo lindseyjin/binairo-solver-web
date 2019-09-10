@@ -78,14 +78,14 @@ button {
 }
 
 .btnSecondary{
-  background-color: #A0A0A0;
+  background-color: rgb(153, 153, 153);
   padding: 2px 20px;
   margin: 5px;
   line-height: 1.5em;
 }
 
 .btnSecondary:hover {
-  background-color: #777777;
+  background-color: rgb(62, 124, 112);
 }
 
 textarea:focus, input:focus{
@@ -103,7 +103,7 @@ table {
 
 .main-dark table {
   border: 0.15rem solid black;
-  background: #777777;
+  background: #787981;
 }
 
 .cell {
