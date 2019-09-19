@@ -2,6 +2,9 @@ import React from 'react';
 import './App.css';
 const axios = require('axios');
 
+// url = 'http://localhost:5000/solve';
+url = 'https://binairo-solver.herokuapp.com'
+
 
 class App extends React.Component {
   constructor(props) {
@@ -59,11 +62,11 @@ class App extends React.Component {
 
   solvePuzzle() {
     var self = this;
-    let es = new EventSource('http://localhost:5000/solve');
+    let es = new EventSource(url);
     es.onmessage = e => {
       self.setState({ data: e.data.board })
     }
-    axios.post('http://localhost:5000/solve', {
+    axios.post(url, {
       board_values: self.state.data
     })
       .then(function (response) {
