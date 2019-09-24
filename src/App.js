@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 const axios = require('axios');
 
-// url = 'http://localhost:5000/solve';
-url = 'https://binairo-solver.herokuapp.com'
+// const url = 'http://localhost:5000';
+const url = 'https://binairo-solver.herokuapp.com'
 
 
 class App extends React.Component {
@@ -27,6 +27,7 @@ class App extends React.Component {
     this.clearGrid = this.clearGrid.bind(this);
     this.changeGridSize = this.changeGridSize.bind(this);
     this.solvePuzzle = this.solvePuzzle.bind(this);
+    this.getBoard = this.getBoard.bind(this);
   }
 
   // Event Handlers
@@ -53,8 +54,11 @@ class App extends React.Component {
 
   changeGridSize(value) {
     let len = parseInt(value);
-    // todo: get data for random grids? 
-    let newData = Array.from(Array(len), _ => Array(len).fill(2));
+    // TODO: get data for random grids
+    let newData = this.getBoard(len);
+    if (!newData) {
+      newData = Array.from(Array(len), _ => Array(len).fill(2));
+    }
 
     this.setState({ gridSize: len });
     this.setState({ data: newData })
@@ -66,7 +70,7 @@ class App extends React.Component {
     es.onmessage = e => {
       self.setState({ data: e.data.board })
     }
-    axios.post(url, {
+    axios.post(url + "/solve", {
       board_values: self.state.data
     })
       .then(function (response) {
@@ -76,10 +80,31 @@ class App extends React.Component {
       })
       .catch(function (error) {
         // handle error
+        console.log(error)
+        self.setState({ data: [] })
         console.log(error);
       })
   }
 
+  getBoard(len) {
+    console.log("getting board")
+    var self = this;
+    axios.get(url + "/board", {
+      params: {
+        size: len
+      }
+    })
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        self.setState({ data: response.data.board })
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        self.setState({ data: Array.from(Array(len), _ => Array(len).fill(2)) })
+      })
+  }
 
   render() {
     return (
@@ -103,9 +128,9 @@ class App extends React.Component {
             <option value="6">6 x 6</option>
             <option value="8">8 x 8</option>
             <option value="10">10 x 10</option>
-            <option value="14">14 x 14</option>
-            <option value="20">20 x 20</option>
-            <option value="24">24 x 24</option>
+            {/* <option value="14">14 x 14</option> */}
+            {/* <option value="20">20 x 20</option> */}
+            {/* <option value="24">24 x 24</option> */}
           </select>
           <table>
             <tbody onContextMenu={(e) => e.preventDefault()}>
